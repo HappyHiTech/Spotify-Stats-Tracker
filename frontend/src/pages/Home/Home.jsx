@@ -2,7 +2,7 @@ import "./Home.css"
 import Heading from "./Heading/Heading";
 import FileUpload from "./FileUpload/FileUpload";
 import Stats from "../Stats/Stats";
-import ClickProvider from "../../hook/ClickContent";
+import { ClickProvider } from "../../hook/ClickContent";
 import "@fontsource/ibm-plex-sans";
 import "@fontsource/ibm-plex-sans/700.css";
 

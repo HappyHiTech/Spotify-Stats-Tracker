@@ -1,10 +1,10 @@
 import "./Card.css"
 import {useState, useRef, useEffect} from 'react';
-import { useClick } from "../../../hook/ClickContent";
+import { useUpload } from "../../../hook/ClickContent";
 
 export default function Card() {
     const [totalTime, setTotalTime] = useState('')
-    const {listenTimeData, uploaded} = useClick();
+    const {listenTimeData, uploaded} = useUpload();
     const monthButtonRef = useRef(null);
 
     

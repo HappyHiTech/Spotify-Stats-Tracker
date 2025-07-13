@@ -1,11 +1,11 @@
 import { createContext, useContext, useState} from 'react';
 
-const ClickContext = createContext();
-export const useClick = () => useContext(ClickContext)
+const UploadContext = createContext();
+export const useUpload = () => useContext(UploadContext)
 
-export default function ClickProvider({ children }) {
+export function ClickProvider({ children }) {
     const [fileName, setFileName] = useState('');
-    const [listenTimeData, setlistenTimeData] = useState(null);
+    const [listenTimeData, setListenTimeData] = useState(null);
     const [uploaded, setUploaded] = useState(false)
     
 
@@ -27,7 +27,7 @@ export default function ClickProvider({ children }) {
                     return response.json()
                 })
                 .then((data) => {
-                    setlistenTimeData(data.listenTime)
+                    setListenTimeData(data.listenTime)
                     setUploaded(true)
                 })
         }
@@ -35,8 +35,8 @@ export default function ClickProvider({ children }) {
 
 
     return (
-        <ClickContext.Provider value ={{listenTimeData, fileName, handleChange, uploaded}}>
+        <UploadContext.Provider value ={{listenTimeData, fileName, handleChange, uploaded}}>
             {children}
-        </ClickContext.Provider>
+        </UploadContext.Provider>
     );
 }
