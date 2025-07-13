@@ -1,4 +1,7 @@
 .stats-body{
     /* background-color:blue; */
     padding-top: 20px;
+    display:flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
