@@ -1,5 +1,5 @@
 import "./Stats.css"
-import Card from "./Card/card";
+import ListenTime from "./StatsCards/ListenTime/ListenTime";
 import { useState } from "react";
 import { useUpload } from "../../hook/ClickContent";
 
@@ -7,7 +7,7 @@ export default function Stats(){
 
     return (
         <div className="stats-body">    
-            <Card />
+            <ListenTime />
             
         </div>
     );

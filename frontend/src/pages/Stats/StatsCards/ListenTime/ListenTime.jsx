@@ -1,13 +1,12 @@
-import "./Card.css"
+import "./ListenTime.css"
 import {useState, useRef, useEffect} from 'react';
-import { useUpload } from "../../../hook/ClickContent";
+import { useUpload } from "../../../../hook/ClickContent";
 
-export default function Card({title, clickFunc}) {
+export default function ListenTime({title, clickFunc}) {
     const [listenTime, setListenTime] = useState('')
     const {listenTimeData, uploaded} = useUpload();
     const monthButtonRef = useRef(null);
 
-    
     useEffect(() => {
         if (uploaded && monthButtonRef.current){
             monthButtonRef.current.focus();
