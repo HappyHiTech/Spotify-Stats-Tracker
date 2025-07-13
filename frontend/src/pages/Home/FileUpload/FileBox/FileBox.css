@@ -1,0 +1,33 @@
+.file-upload-box {
+    margin: 30px;
+    width: 400px;
+    border: 2px dashed #ccc;
+    background-color: transparent;
+    border-radius: 12px;
+    padding:40px;
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.file-upload-box:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa
+}
+
+.file-upload-box.drag-over {
+    background-color: #e0f7fa;
+    border-color: #00796b;
+    color: #00796b;
+}
+
+.file-upload-box p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.file_input {
+    display: none;
+}

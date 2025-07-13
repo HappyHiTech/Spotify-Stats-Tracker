@@ -1,0 +1,39 @@
+.card {
+    background-color: #282525;
+    box-shadow: 6px 6px 3px -2px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    width: 700px;
+    height: 200px;
+    min-height: 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 0.2fr 1fr;
+    gap:2px;
+}
+
+.card-header {
+    grid-column: 1 / 4;
+    font-family: "IBM Plex Sans";
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 4px solid rgb(255, 255, 255);
+    box-sizing: border-box;
+    padding-top: 7px;
+}
+
+.card-button {
+    background-color:#302d2d;
+}
+
+.card-main {
+    grid-column: 1 / 4;
+    font-family: "IBM Plex Sans";
+    font-weight: bold;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-content: flex-end;
+    box-sizing: border-box;
+    padding-top: 25px;
+}
+

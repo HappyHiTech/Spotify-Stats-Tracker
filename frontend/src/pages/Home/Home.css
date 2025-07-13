@@ -1,0 +1,11 @@
+.home-page-body {
+    /* background-color: blue; */
+    height: 100vh;
+    width: 100vw;
+    padding: 10px;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+    
+}
+
