@@ -1,14 +1,20 @@
+from .api import SpotifyApi
 from pathlib import Path
 import json
 import pandas as pd
 from datetime import datetime
+import requests
+import base64
 
+client_id = "6f9dc9391606485eb9267a46d10233e0"
+client_secret = "1ddc557463c44717b94de21667049537"
 
 class StatManager():
     def __init__(self, stats_path: Path):
         self._stats_path = stats_path
         self._df = None
         self._stats = {}
+        self._spotify_api = SpotifyApi(client_id, client_secret)
 
     def stats(self) -> dict:
         return self._stats
@@ -49,6 +55,43 @@ class StatManager():
             "currentYear": f"{round(current_year_min):,}",
             "allTime": f"{round(all_time_min):,}"
         }
+    def _make_data_list(self, top_artists: pd.Series) -> list[dict]:
+        for artist, listen_time in top_artists.items():
+            print(artist)
+            print(listen_time)
+     
+
+    def top_artist(self):
+        #----All Time---#
+        top_artists_all_time = (
+            self._df.groupby("master_metadata_album_artist_name")["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_artists_all_time_list = self._make_data_list(top_artists_all_time)
+        
+        
+
+
+        self._stats["TopArtist"] = {
+            "currentMonth": [
+                {
+                    "artistImg": "fdsfs",
+                    "artistName": "sdfdsf",
+                    "listenTime": "fdsdf"
+                },
+                {
+                    "artistImg": "fdsfs",
+                    "artistName": "sdfdsf",
+                    "listenTime": "fdsdf"
+                }
+            ],
+            "currentYear": [],
+            "allTime": []
+        }
+
+
 
         
 
@@ -58,7 +101,7 @@ temp_path = Path("spotify_files/Spotify Extended Streaming History")
 
 sm = StatManager(temp_path)
 sm.create_dataframe()
-sm.listen_time()
+sm.top_artist()
 
 
 
