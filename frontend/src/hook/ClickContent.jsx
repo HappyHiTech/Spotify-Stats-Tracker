@@ -6,6 +6,7 @@ export const useUpload = () => useContext(UploadContext)
 export function ClickProvider({ children }) {
     const [fileName, setFileName] = useState('');
     const [listenTimeData, setListenTimeData] = useState(null);
+    const [topArtistData, setTopArtistData] = useState(null);
     const [uploaded, setUploaded] = useState(false)
     
 
@@ -24,18 +25,21 @@ export function ClickProvider({ children }) {
                 body: formData
             })
                 .then((response) => {
-                    return response.json()
+                    return response.json();
                 })
                 .then((data) => {
-                    setListenTimeData(data.listenTime)
-                    setUploaded(true)
+                    setListenTimeData(data.listenTime);
+                    setTopArtistData(data.topArtist);
+                    console.log(data.topArtist);
+                    setUploaded(true);
                 })
+
         }
     }
 
 
     return (
-        <UploadContext.Provider value ={{listenTimeData, fileName, handleChange, uploaded}}>
+        <UploadContext.Provider value ={{listenTimeData, topArtistData, fileName, handleChange, uploaded}}>
             {children}
         </UploadContext.Provider>
     );

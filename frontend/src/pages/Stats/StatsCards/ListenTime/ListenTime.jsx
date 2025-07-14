@@ -2,7 +2,8 @@ import "./ListenTime.css"
 import {useState, useRef, useEffect} from 'react';
 import { useUpload } from "../../../../hook/ClickContent";
 
-export default function ListenTime({title, clickFunc}) {
+export default function ListenTime() {
+    const [selectedButton, setSelectedButton] = useState("CM")
     const [listenTime, setListenTime] = useState('')
     const {listenTimeData, uploaded} = useUpload();
     const monthButtonRef = useRef(null);
@@ -15,6 +16,7 @@ export default function ListenTime({title, clickFunc}) {
     }, [uploaded])
 
     const handleClick = (type) => {
+        setSelectedButton(type)
         const allTime = listenTimeData["allTime"];
         const currentMonth = listenTimeData["currentMonth"];
         const currentYear = listenTimeData["currentYear"];
@@ -31,11 +33,11 @@ export default function ListenTime({title, clickFunc}) {
     }
 
     return (
-        <div className="card">
-            <header className="card-header">{title}</header>
-            <button onClick={() => handleClick("CM")} className="card-button" ref={monthButtonRef}>Current Month</button>
-            <button onClick={() => handleClick("CY")} className="card-button">Current Year</button>
-            <button onClick={() => handleClick("AT")} className="card-button">All Time</button>
+        <div className="listen-time-card">
+            <header className="card-header">Total Listen Time (Mins)</header>
+            <button onClick={() => handleClick("CM")} className={`card-button-l${selectedButton === "CM" ? "-selected" : "" }`} ref={monthButtonRef}>Current Month</button>
+            <button onClick={() => handleClick("CY")} className={`card-button-l${selectedButton === "CY" ? "-selected" : "" }`}>Current Year</button>
+            <button onClick={() => handleClick("AT")} className={`card-button-l${selectedButton === "AT" ? "-selected" : "" }`}>All Time</button>
             <div className="card-main">{listenTime} Minutes</div>
         </div>
     );

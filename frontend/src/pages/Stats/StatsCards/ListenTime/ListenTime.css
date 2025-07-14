@@ -1,4 +1,4 @@
-.card {
+.listen-time-card {
     background-color: #282525;
     box-shadow: 6px 6px 3px -2px rgba(0, 0, 0, 0.3);
     border-radius: 15px;
@@ -21,8 +21,13 @@
     padding-top: 7px;
 }
 
-.card-button {
+.card-button-l {
     background-color:#302d2d;
+}
+
+.card-button-l-selected {
+    background-color:#302d2d;
+    outline: 4px auto -webkit-focus-ring-color;
 }
 
 .card-main {
