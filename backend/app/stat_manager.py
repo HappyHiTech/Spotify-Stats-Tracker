@@ -163,11 +163,11 @@ class StatManager():
 
 
 
-temp_path = Path("spotify_files/Spotify Extended Streaming History")
+# temp_path = Path("spotify_files/Spotify Extended Streaming History")
 
-sm = StatManager(temp_path)
-sm.create_dataframe()
-sm.top_song()
+# sm = StatManager(temp_path)
+# sm.create_dataframe()
+# sm.top_song()
 
 
 
