@@ -1,6 +1,7 @@
 import requests
 import base64
 import time
+from urllib.parse import urlencode
 
 
 class SpotifyApi():
@@ -32,8 +33,41 @@ class SpotifyApi():
         self._expires_at = time.time() + token_data["expires_in"]
 
     def _get_headers(self):
-        if not self.access_token or time.time() >= self._expires_at:
+        if not self._access_token or time.time() >= self._expires_at:
             self._get_token()
         return {
             "Authorization": f"Bearer {self._access_token}"
         }
+    
+    def get_img(self, name: str, type: str) -> str:
+        params = None
+        if type == "artist":
+            params = {
+                "q": name,
+                "type": type,
+                "limit": "2"
+
+            }
+        if type == "track":
+            params = {
+                "q": f"track:{name[0]} artist:{name[1]}",
+                "type": type,
+                "limit": "2"
+            }
+
+
+        query_string = urlencode(params)
+
+        url = f"{self._api_base_url}/search?{query_string}"
+        img_url = ""
+        response = requests.get(url, headers=self._get_headers()).json()
+        if type == "artist":
+            img_url = response[f"{type}s"]["items"][0]["images"][0]["url"]
+        elif type == "track":
+            img_url = response[f"{type}s"]["items"][0]["album"]["images"][0]["url"]
+            duration_of_track = response[f"{type}s"]["items"][0]["duration_ms"]
+            img_url += "(!)" + str(duration_of_track)
+        return img_url
+        
+
+        

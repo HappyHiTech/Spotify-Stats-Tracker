@@ -5,14 +5,22 @@ import pandas as pd
 from datetime import datetime
 import requests
 import base64
+import os
+from dotenv import load_dotenv
 
-client_id = "6f9dc9391606485eb9267a46d10233e0"
-client_secret = "1ddc557463c44717b94de21667049537"
+# Load environment variables from .env file
+load_dotenv()
+
+# Get API credentials from environment variables
+client_id = os.getenv("SPOTIFY_CLIENT_ID")
+client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 class StatManager():
     def __init__(self, stats_path: Path):
         self._stats_path = stats_path
         self._df = None
+        self._df_curr_month = None
+        self._df_curr_year = None
         self._stats = {}
         self._spotify_api = SpotifyApi(client_id, client_secret)
 
@@ -30,24 +38,24 @@ class StatManager():
 
         self._df = pd.concat(dfs, ignore_index=True)
         self._df['ts'] = pd.to_datetime(self._df['ts'], utc=True)
+
+        now = pd.Timestamp.utcnow()
+        current_year = now.year
+        current_month = now.month
+
+        self._df_curr_month = self._df[(self._df['ts'].dt.year == current_year) & (self._df['ts'].dt.month == current_month)]
+        self._df_curr_year = self._df[(self._df['ts'].dt.year == current_year)]
     
     def listen_time(self):
         #----All Time Total Mins----#
         all_time_ms = self._df["ms_played"].sum() 
         all_time_min = all_time_ms / 60000
 
-        #----Current Month----#
-        now = pd.Timestamp.utcnow()
-        current_year = now.year
-        current_month = now.month
-
-        df_current_month = self._df[(self._df['ts'].dt.year == current_year) & (self._df['ts'].dt.month == current_month)]
-        current_month_ms = df_current_month["ms_played"].sum()
+        current_month_ms = self._df_curr_month["ms_played"].sum()
         current_month_min = current_month_ms / 60000
 
         #----Current Year ----#
-        df_current_year = self._df[(self._df['ts'].dt.year == current_year)]
-        current_year_ms = df_current_year["ms_played"].sum()
+        current_year_ms = self._df_curr_year["ms_played"].sum()
         current_year_min = current_year_ms / 60000
 
         self._stats["listenTime"] = {
@@ -55,10 +63,27 @@ class StatManager():
             "currentYear": f"{round(current_year_min):,}",
             "allTime": f"{round(all_time_min):,}"
         }
-    def _make_data_list(self, top_artists: pd.Series) -> list[dict]:
-        for artist, listen_time in top_artists.items():
-            print(artist)
-            print(listen_time)
+
+    def _make_data_list(self, top_data: pd.Series, type: str) -> list[dict]:
+        data_list = []
+        times_played = 0
+        for data, listen_time in top_data.items():
+            listen_time_min = round(listen_time / 60000)
+            img_url = self._spotify_api.get_img(data, type)
+            if type == "track":
+                temp = img_url.split("(!)")
+                img_url = temp[0]
+                duration_min = round(int(temp[1]) / 60000, 2)
+                times_played = round(listen_time_min / duration_min)
+            data_dict = {
+                "img": img_url,
+                "name": data if isinstance(data, str) else data[0],
+                "listenTime": f"{listen_time_min:,}",
+                "timesPlayed": f"{times_played:,}"
+            }
+            data_list.append(data_dict)
+        return data_list
+            
      
 
     def top_artist(self):
@@ -69,26 +94,67 @@ class StatManager():
             .sort_values(ascending=False)
             .head(5)
         )
-        top_artists_all_time_list = self._make_data_list(top_artists_all_time)
+        top_artists_all_time_list = self._make_data_list(top_artists_all_time, "artist")
         
-        
+        #----Current Month----#
+        top_artists_curr_month = (
+            self._df_curr_month.groupby("master_metadata_album_artist_name")["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_artists_curr_month_list = self._make_data_list(top_artists_curr_month, "artist")
 
 
-        self._stats["TopArtist"] = {
-            "currentMonth": [
-                {
-                    "artistImg": "fdsfs",
-                    "artistName": "sdfdsf",
-                    "listenTime": "fdsdf"
-                },
-                {
-                    "artistImg": "fdsfs",
-                    "artistName": "sdfdsf",
-                    "listenTime": "fdsdf"
-                }
-            ],
-            "currentYear": [],
-            "allTime": []
+        #----Current Year----#
+        top_artists_curr_year = (
+            self._df_curr_year.groupby("master_metadata_album_artist_name")["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_artists_curr_year_list = self._make_data_list(top_artists_curr_year, "artist")
+
+
+        self._stats["topArtist"] = {
+            "currentMonth": top_artists_curr_month_list,
+            "currentYear": top_artists_curr_year_list,
+            "allTime": top_artists_all_time_list
+        }
+
+    def top_song(self):
+        #----All Time ----#
+        top_songs_all_time = (
+            self._df.groupby(["master_metadata_track_name", "master_metadata_album_artist_name"])["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_songs_all_time_list = self._make_data_list(top_songs_all_time, "track")
+
+         #----Current Month----#
+        top_songs_curr_month = (
+            self._df_curr_month.groupby(["master_metadata_track_name", "master_metadata_album_artist_name"])["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_songs_curr_month_list = self._make_data_list(top_songs_curr_month, "track")
+
+
+        #----Current Year----#
+        top_songs_curr_year = (
+            self._df_curr_year.groupby(["master_metadata_track_name", "master_metadata_album_artist_name"])["ms_played"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+        )
+        top_songs_curr_year_list = self._make_data_list(top_songs_curr_year, "track")
+
+        self._stats["topSong"] = {
+            "currentMonth": top_songs_curr_month_list,
+            "currentYear": top_songs_curr_year_list,
+            "allTime": top_songs_all_time_list
         }
 
 
@@ -101,7 +167,7 @@ temp_path = Path("spotify_files/Spotify Extended Streaming History")
 
 sm = StatManager(temp_path)
 sm.create_dataframe()
-sm.top_artist()
+sm.top_song()
 
 
 

@@ -22,9 +22,10 @@ def file_data():
     spotify_data_manager = FileManager(spotify_data_zip)
     spotify_data_manager.extract(FILE_PATH)
     stat_manager = StatManager(temp_path)
+    
     stat_manager.create_dataframe()
     stat_manager.listen_time()
-
-
-    print(stat_manager.stats())
+    stat_manager.top_artist()
+    stat_manager.top_song()
+    
     return jsonify(stat_manager.stats())
