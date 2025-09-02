@@ -16,8 +16,8 @@ client_id = os.getenv("SPOTIFY_CLIENT_ID")
 client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 class StatManager():
-    def __init__(self, stats_path: Path):
-        self._stats_path = stats_path
+    def __init__(self, json_data: list):
+        self._json_data = json_data
         self._df = None
         self._df_curr_month = None
         self._df_curr_year = None
@@ -28,15 +28,8 @@ class StatManager():
         return self._stats
 
     def create_dataframe(self):
-        dfs = []
-
-        for file in self._stats_path.iterdir():
-            with open(file) as f:
-                data = json.load(f)
-            df = pd.DataFrame(data)
-            dfs.append(df)
-
-        self._df = pd.concat(dfs, ignore_index=True)
+        # Create DataFrame directly from the JSON data in memory
+        self._df = pd.DataFrame(self._json_data)
         self._df['ts'] = pd.to_datetime(self._df['ts'], utc=True)
 
         now = pd.Timestamp.utcnow()
@@ -163,11 +156,7 @@ class StatManager():
 
 
 
-# temp_path = Path("spotify_files/Spotify Extended Streaming History")
 
-# sm = StatManager(temp_path)
-# sm.create_dataframe()
-# sm.top_song()
 
 
 
