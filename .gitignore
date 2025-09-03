@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+my_spotify_data.zip
+my_spotify_dataSep.zip
+test_spotify_data.zip
