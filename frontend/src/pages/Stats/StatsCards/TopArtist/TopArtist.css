@@ -56,9 +56,6 @@
     padding-top: 7px;
 }
 
-.card-button-l {
-    background-color:#302d2d;
-}
 
 .card-main {
     grid-column: 1 / 4;
@@ -74,9 +71,11 @@
 
 .card-button-t- {
     background-color:#302d2d;
+    color: white;
 }
 
 .card-button-t-selected {
+    color: white;
     background-color:#302d2d;
     outline: 4px auto -webkit-focus-ring-color;
 }

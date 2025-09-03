@@ -23,9 +23,11 @@
 
 .card-button-l {
     background-color:#302d2d;
+    color: white
 }
 
 .card-button-l-selected {
+    color: white;
     background-color:#302d2d;
     outline: 4px auto -webkit-focus-ring-color;
 }

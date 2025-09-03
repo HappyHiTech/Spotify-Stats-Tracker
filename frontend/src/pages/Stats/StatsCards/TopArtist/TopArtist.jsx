@@ -17,8 +17,8 @@ export default function TopArtist(){
     const artistLines = topArtistArray.map((data) => {
         return (
             <ArtistLine 
-                artistImg={data["artistImg"]}
-                artistName={data["artistName"]}
+                artistImg={data["img"]}
+                artistName={data["name"]}
                 artistListenTime={`Listen Time: ${data["listenTime"]} min`}
             />
         )
@@ -52,11 +52,6 @@ export default function TopArtist(){
             <button onClick={() => handleClick("AT")} className={`card-button-t-${selectedButton === "AT" ? "selected" : "" }`}>All Time</button>
             <div className="artist-list">
                 {artistLines}
-                {/* <ArtistLine 
-                    artistImg="https://i.scdn.co/image/ab6761610000e5eb49799010fa77f1f862ab207e" 
-                    artistName="Wave to Earth" 
-                    artistListenTime="Listen Time: 100,000 min"
-                /> */}
                 
                 
             </div>

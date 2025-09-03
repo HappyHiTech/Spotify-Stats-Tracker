@@ -20,3 +20,26 @@
     box-sizing: border-box;
     padding-top: 7px;
 }
+
+.song-list {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    grid-column: 1 / 4;
+    /* background-color: rgba(0, 0, 255, 0.148); */
+    height:px;
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, auto);
+    gap: 10px
+}
+
+.card-button-s {
+    background-color:#302d2d;
+    color: white;
+}
+
+.card-button-s-selected {
+    background-color:#302d2d;
+    color: white;
+    outline: 4px auto -webkit-focus-ring-color;
+}
